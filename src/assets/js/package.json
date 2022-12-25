@@ -3,8 +3,7 @@
   "license": "MIT",
   "scripts": {
     "dev": "parcel src/*.html",
-    "build": "parcel build --public-url /templateTailwind/ src/*.html",
-    "buildNotRoot": "parcel build --public-url 'templateTailwind' src/*.html"
+    "build": "parcel build src/*.html"
   },
   "dependencies": {
     "autoprefixer": "^10.4.7",
