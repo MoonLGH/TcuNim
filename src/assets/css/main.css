@@ -3,3 +3,7 @@
 @tailwind components;
 @tailwind utilities;
 /* purgecss end ignore */
+
+#navLi a {
+    text-align:center
+}
