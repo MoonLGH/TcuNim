@@ -3,7 +3,7 @@ const query = new URLSearchParams(window.location.search)
 let provider = query.get("provider")
 
 console.log(`MainMenu of ${provider}`)
-
+let page = 1
 menu()
 async function menu() {
     let api = localStorage.getItem("API");
@@ -33,6 +33,16 @@ async function menu() {
         `
     }
 }
+
+async function more(){
+    let api = localStorage.getItem("API");
+    page++
+    let homePage = await fetch(api + "api/menu?provider=" + provider + `&page=${page}`)
+    const homeres = await homePage.json()
+    loadLatest(homeres)
+    loadPopular(homeres)
+}
+
 
 async function loadLatest(data){
     for (let i = 0; i < data.latest.length; i++) {

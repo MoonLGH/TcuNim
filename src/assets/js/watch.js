@@ -1,18 +1,17 @@
 const query = new URLSearchParams(window.location.search)
 
 let provider = query.get("provider")
-let q = query.get("q")
+let id = query.get("id")
 
 console.log(`provider of ${provider}`)
-console.log(`query of ${q}`)
-let page = 1
+console.log(`query of ${id}`)
 menu()
 async function menu() {
     let api = localStorage.getItem("API");
     try {
-        document.querySelector("#prov").value = provider
         let data = await fetch(api + "api/extension?extension=" + provider)
         data = await data.json();
+        console.log(data)
         document.querySelector("#topCard").innerHTML += `
             <div class="w-full p-4 text-center bg-white border rounded-lg shadow-md sm:p-8 dark:bg-gray-800 dark:border-gray-700">
                 <h5 class="mb-2 text-3xl font-bold text-gray-900 dark:text-white">${data.name}</h5>
@@ -20,9 +19,7 @@ async function menu() {
             </div>
         `
 
-        let search = await fetch(api + "api/search?provider=" + provider + "&q=" + q)
-        const sres = await search.json()
-        loadData(sres)
+        let watch
     } catch (error) {
         console.log(error)
         document.querySelector("#topCard").innerHTML += `
@@ -56,12 +53,4 @@ async function loadData(data){
    </div>
  </div>`
     }
-}
-
-async function more(){
-    let api = localStorage.getItem("API");
-    page++
-    let search = await fetch(api + "api/search?provider=" + provider + "&q=" + q + `&page=${page}`)
-    const sres = await search.json()
-    loadData(sres)
 }
