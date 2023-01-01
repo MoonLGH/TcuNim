@@ -5,6 +5,8 @@ let id = query.get("id")
 
 console.log(`provider of ${provider}`)
 console.log(`query of ${id}`)
+
+let videoList = []
 menu()
 async function menu() {
     let api = localStorage.getItem("API");
@@ -19,7 +21,10 @@ async function menu() {
             </div>
         `
 
-        let watch
+        let watch = await fetch(api+`api/watch?provider=${provider}&id=${id}`)
+        watch = await watch.json()
+        await loadData(watch)
+        loadVideo(videoList)
     } catch (error) {
         console.log(error)
         document.querySelector("#topCard").innerHTML += `
@@ -32,25 +37,81 @@ async function menu() {
 }
 
 async function loadData(data){
-    for (let i = 0; i < data.length; i++) {
-    let anime = data[i]
-    console.log(anime)
-    document.querySelector("#data dl").innerHTML +=`
-    <div class="flex flex-col items-center justify-center">
-    <div class="w-full max-w-sm bg-white rounded-lg shadow-md dark:bg-gray-800 dark:border-gray-700">
-       <a href="./detail.html?provider=${provider}&id=${anime.url.split("/anime/")[1]}">
-           <img class="p-8 roundex-lg rounded-t-lg m-auto" src="${anime.thumbnail_url}" alt="product image" />
-       </a>
-       <div class="px-5 pb-5">
-           <a href="./detail.html?provider=${provider}&id=${anime.url.split("/anime/")[1]}">
-               <h5 class="text-xl font-semibold tracking-tight text-gray-900 dark:text-white">${anime.title}</h5>
-           </a>
-           <div class="flex items-center justify-between">
-               <span class="text-sm font-bold text-gray-900 dark:text-white">${anime.totalEps.split("\n").join("<br>")}</span>
-               <a href="./detail.html?provider=${provider}&id=${anime.url.split("/anime/")[1]}" class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Watch</a>
-           </div>
-       </div>
-   </div>
- </div>`
+    document.querySelector("#title").innerText = data.title
+    try {
+        for (let i = 0; i < data.video.length; i++) {
+            let video = data.video[i]
+            if(video.url.toLowerCase().includes("zippy")){
+                let link = await parseZippy(video.url)
+                videoList.push({url:link,quality:video.quality})
+            } else {
+                videoList.push({url:video.url,quality:video.quality})
+            }
+        }
+    } catch (err) {
+        document.querySelector("#topCard").innerHTML += `
+        <div class="w-full p-4 text-center bg-white border rounded-lg shadow-md sm:p-8 dark:bg-gray-800 dark:border-gray-700">
+            <h5 class="mb-2 text-3xl font-bold text-gray-900 dark:text-white">Video is detected from "ip-based website"</h5>
+            <a class="mb-5 text-base text-gray-500 sm:text-lg dark:text-gray-400">if you want to play the video here, you can download the app version of this web in <a href="./download.html">Here</a> or use this <a href="https://chrome.google.com/webstore/detail/allow-cors-access-control/lhobafahddgcelffkeicbaginigeejlf">Extension (Not Recommended, use with caution cause it can lead you to bad things, or you can just make it allow from this website)</a></a>
+            <a class="mb-5 text-base text-gray-500 sm:text-lg dark:text-gray-400">or just download manually... i guess</a>
+        </div>`
     }
+    // loop data.downloads
+    for (let i = 0; i < data.downloads.length; i++) {
+        let download = data.downloads[i]
+        document.querySelector("#dls").innerHTML += `
+                <div class="Quality">
+                <h2 class="mb-2 text-lg font-semibold text-gray-900 dark:text-white">${download.quality}</h2>
+                <ul class="space-y-1 max-w-md list-disc list-inside text-gray-500 dark:text-gray-400">
+                    ${download.links.map((link) => `<li><a href="${link.url}">${link.provider}</a></li>`).join("")}
+                </ul>
+            </div>
+            `
+    }
+    if(data.prev){
+        document.querySelector("#prev").setAttribute("href", `./watch.html?provider=${provider}&id=${data.prev}`)
+        document.querySelector("#prev").classList.toggle("hidden")
+    }
+    if(data.next){
+        document.querySelector("#next").setAttribute("href", `./watch.html?provider=${provider}&id=${data.next}`)
+        document.querySelector("#next").classList.toggle("hidden")
+    }
+}
+
+async function parseZippy(url) {
+    let res = (await (await fetch(url)).text())
+    // const $ = load(res.data);
+    res = res.split("document.getElementById('dlbutton').href")[1]
+    let link = url.substring(0, url.indexOf("/d/"));
+    const firstString = res.substring(
+      res.indexOf(" = \"") + 4,
+      res.indexOf("\" + ("),
+    );
+    const num = parseInt(res.split("+ (")[1].split("%")[0]);
+    // console.log(num);
+    const lastString = res.substring(
+      res.indexOf("913) + \"") + 8,
+      res.indexOf("\";"),
+    );
+    const nums = (num % 51245 + num % 913);
+    link += firstString + nums.toString() + lastString;
+    console.log(link)
+    return link;
+  }
+  
+function loadVideo(data){
+    // loop data
+    selectVideo(data[0].quality)
+    if(data.length < 2) return
+    for (let i = 0; i < data.length; i++) {
+        document.querySelector("#quality").innerHTML += `<option>${data[i].quality}</option>`        
+    }
+    document.querySelector("#selQua").classList.toggle("hidden")
+}
+
+function selectVideo(selector){
+    console.log(selector)
+    let video = videoList.find((el) => el.quality === selector)
+    console.log(video)
+    document.querySelector("#watchUrl").setAttribute("src",video.url)
 }

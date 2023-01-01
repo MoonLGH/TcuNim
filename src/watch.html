@@ -11,6 +11,7 @@
    <script src="./assets/js/util/country.js" defer></script>
    <script src="./assets/js/watch.js" defer></script>
    <script src="../node_modules/flowbite/dist/flowbite.js"></script>
+
 </head>
 
 <body>
@@ -75,11 +76,54 @@
          </div>
       </aside>
       <div id="content" class="mx-auto w-3/4 mt-4">
-        <div id="topCard"></div>
+         <div id="topCard"></div>
+
+         <h1 id="title" class="text-3xl text-center mt-12"></h1>
+         <video id="watchUrl" class="m-auto" controls>
+         </video>
+
+         <div id="selQua" class="mx-auto w-3/4 mt-10 hidden">
+            <label for="quality" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Select quality</label>
+            <select id="quality" onchange="selectVideo(this.value)" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+            </select>
+         </div>
+         
+         <div class="pagination text-center mt-4">
+            <a id="prev"
+               class="hidden inline-flex items-center px-4 py-2 text-sm font-medium text-gray-500 bg-white border border-gray-300 rounded-lg hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white">
+               Previous
+            </a>
+
+            <a 
+               id="next"
+               class="hidden inline-flex items-center px-4 py-2 ml-3 text-sm font-medium text-gray-500 bg-white border border-gray-300 rounded-lg hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white">
+               Next
+            </a>
+         </div>
+         <h1 class="text-3xl text-center mt-12">Download</h1>
+         <div id="dls"
+            class="text-center grid max-w-screen-xl gap-8 p-4 mx-auto text-gray-900 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 dark:text-white sm:p-8">
+
+         </div>
       </div>
    </div>
 </body>
 <!-- PLACEHOLDER -->
-<div class="hidden"></div>
+<div class="hidden">
+   <div class="Quality">
+      <h2 class="mb-2 text-lg font-semibold text-gray-900 dark:text-white">240</h2>
+      <ul class="space-y-1 max-w-md list-disc list-inside text-gray-500 dark:text-gray-400">
+         <li>
+            <a href="http://google.com">Mega</a>
+         </li>
+         <li>
+            <a href="http://google.com">Mega</a>
+         </li>
+         <li>
+            <a href="http://google.com">Mega</a>
+         </li>
+      </ul>
+   </div>
+</div>
 
 </html>
