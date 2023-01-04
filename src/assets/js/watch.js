@@ -52,9 +52,11 @@ async function loadData(data){
         document.querySelector("#topCard").innerHTML += `
         <div class="w-full p-4 text-center bg-white border rounded-lg shadow-md sm:p-8 dark:bg-gray-800 dark:border-gray-700">
             <h5 class="mb-2 text-3xl font-bold text-gray-900 dark:text-white">Video is detected from "ip-based website"</h5>
-            <a class="mb-5 text-base text-gray-500 sm:text-lg dark:text-gray-400">if you want to play the video here, you can download the app version of this web in <a href="./download.html">Here</a> or use this <a href="https://chrome.google.com/webstore/detail/allow-cors-access-control/lhobafahddgcelffkeicbaginigeejlf">Extension (Not Recommended, use with caution cause it can lead you to bad things, or you can just make it allow from this website)</a></a>
+            <a class="mb-5 text-base text-gray-500 sm:text-lg dark:text-gray-400">if you want to play the video here, you can download the app version of this web in <a href="./download.html">Here</a> or use this <a href="https://chrome.google.com/webstore/detail/allow-cors-access-control/lhobafahddgcelffkeicbaginigeejlf">Extension (Not Recommended)</a> please <a href="./allowCors.html">README</a> if you want to use the extension</a>
             <a class="mb-5 text-base text-gray-500 sm:text-lg dark:text-gray-400">or just download manually... i guess</a>
         </div>`
+        document.querySelector("#Notice").innerHTML += `<a href="./allowCors.html" class="btn btn-primary">README</a>`
+        document.querySelector("#Notice").classList.toggle("hidden")
     }
     // loop data.downloads
     for (let i = 0; i < data.downloads.length; i++) {
