@@ -11,9 +11,11 @@ function setLocalStorage(key, value) {
 }
 
 async function submitAPI() {
-    let value = document.querySelector("#API").value
+    let value = document.querySelector("#API").value || localStorage.getItem("API");
+    let valueNsfw = document.querySelector("#NSFW").checked
+    console.log(valueNsfw)
     let res = await fetch(value+"api/ping")
-    if(value.length < 3 || !res.ok){
+    if(!res.ok){
         document.querySelector("#alerts").innerHTML = `
         <div class="p-4 mb-4 text-sm text-red-700 bg-red-100 rounded-lg dark:bg-red-200 dark:text-red-800" role="alert">
             <span class="font-medium">Danger alert!</span> Change a few things up and try submitting again.
@@ -25,6 +27,7 @@ async function submitAPI() {
         return
     }
     setLocalStorage("API", value);
+    setLocalStorage("allowNSFW", valueNsfw.toString());
     document.location.reload()
 }
 main()
@@ -34,5 +37,12 @@ function main(){
         localStorage.setItem("API","https://ApiTcunim.tcukawi.tech/")
         currentapi = localStorage.getItem("API")
     }
+    let currentNsfw = localStorage.getItem("allowNSFW")
+    if(currentNsfw == null){
+        localStorage.setItem("allowNSFW","false")
+        currentNsfw = localStorage.getItem("allowNSFW")
+    }
+    document.querySelector("#NSFW").checked = JSON.parse(currentNsfw)
     document.querySelector("#status").innerHTML += `<div class="text-xl">Current API URI: ${currentapi}</div>`
+    document.querySelector("#status").innerHTML += `<div class="text-xl">Current NSFW Status: ${currentNsfw}</div>`
 }

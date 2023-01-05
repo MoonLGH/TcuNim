@@ -11,7 +11,9 @@ async function main() {
             const extension = json[i];
             const extInfo = await fetch(api+"api/extension?extension="+extension)
             let data = await extInfo.json()
-            loadExt(data)
+            if((data.nsfw && JSON.parse(localStorage.getItem("allowNSFW")) === true) || !data.nsfw) {
+                loadExt(data)
+            }
         }
     } catch (err){
         document.querySelector("#main").innerHTML += `Faliled to fetching data, try refreshing the page or change api url`

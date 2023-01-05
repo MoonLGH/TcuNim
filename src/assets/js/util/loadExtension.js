@@ -12,7 +12,9 @@ async function extLoad() {
         const extension = json[i];
         const extInfo = await fetch(api+"api/extension?extension="+extension)
         let data = await extInfo.json()
-        loadbars(data)
+        if((data.nsfw && JSON.parse(localStorage.getItem("allowNSFW")) === true) || !data.nsfw) {
+            loadbars(data)
+        }
     }
 }
 
