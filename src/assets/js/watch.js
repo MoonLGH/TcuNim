@@ -83,21 +83,14 @@ async function loadData(data){
 async function parseZippy(url) {
     let res = (await (await fetch(url)).text())
     // const $ = load(res.data);
-    res = res.split("document.getElementById('dlbutton').href")[1]
     let link = url.substring(0, url.indexOf("/d/"));
-    const firstString = res.substring(
-      res.indexOf(" = \"") + 4,
-      res.indexOf("\" + ("),
-    );
-    const num = parseInt(res.split("+ (")[1].split("%")[0]);
-    // console.log(num);
-    const lastString = res.substring(
-      res.indexOf("913) + \"") + 8,
-      res.indexOf("\";"),
-    );
-    const nums = (num % 51245 + num % 913);
-    link += firstString + nums.toString() + lastString;
-    console.log(link)
+    let id = url.split("/d/")[1].split("/")[0];
+    console.log(url)
+    const num = parseInt(res.match(/.omg = (\d+)%78956/)[1]) % 78956;
+    const lastStr = res.match(/\+"(.+?)"/);
+    link += "/d/"+ id + "/" + (num+18) + lastStr[1];
+    console.log(link);
+    // console.log(link);
     return link;
   }
   
