@@ -1,5 +1,5 @@
 const query = new URLSearchParams(window.location.search)
-
+let api = localStorage.getItem("API");
 let provider = query.get("provider")
 let id = query.get("id")
 
@@ -7,9 +7,16 @@ console.log(`provider of ${provider}`)
 console.log(`query of ${id}`)
 
 let videoList = []
+initData()
+async function initData(){
+    let watch = await fetch(api+`api/watch?provider=${provider}&id=${id}`)
+    watch = await watch.json()
+    await loadData(watch)
+    loadVideo(videoList)
+}
+
 menu()
 async function menu() {
-    let api = localStorage.getItem("API");
     try {
         let data = await fetch(api + "api/extension?extension=" + provider)
         data = await data.json();
@@ -20,11 +27,6 @@ async function menu() {
                 <p class="mb-5 text-base text-gray-500 sm:text-lg dark:text-gray-400">${getCountryName(data.lang)}</p>
             </div>
         `
-
-        let watch = await fetch(api+`api/watch?provider=${provider}&id=${id}`)
-        watch = await watch.json()
-        await loadData(watch)
-        loadVideo(videoList)
     } catch (error) {
         console.log(error)
         document.querySelector("#topCard").innerHTML += `

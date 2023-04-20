@@ -10,7 +10,6 @@ menu()
 async function menu() {
     let api = localStorage.getItem("API");
     try {
-        document.querySelector("#prov").value = provider
         let data = await fetch(api + "api/extension?extension=" + provider)
         data = await data.json();
         document.querySelector("#topCard").innerHTML += `
@@ -44,26 +43,28 @@ async function loadData(data){
         <p class="mb-3 font-normal text-gray-700 dark:text-gray-400">${data.synopsis}</p>
     </div>
     </a>
+
+    <h1 class="text-center text-xl mt-16 text-white font-bold">Watch ${data.title}</h1>
     `
     let lists = ""
     for (let i = 0; i < data.episodes.length; i++) {
         const element = data.episodes[i];
         lists += `
-        <li class="pb-3 sm:pb-4">
-        <div class="flex items-center space-x-4">
+        <li class="pb-3 sm:pb-4 text-center">
+        <div class="inline items-center">
             <div class="flex-1 min-w-0">
-                <a href="./watch.html?provider=${provider}&id=${element.url}"  class="text-sm font-medium text-gray-900 truncate dark:text-white">
+                <a href="./watch.html?provider=${provider}&id=${element.url}"  class="text-base font-medium text-gray-900 truncate dark:text-white">
                     ${element.title}
                 </a>
              </div>
-              <div class="inline-flex items-center text-base font-semibold text-gray-900 dark:text-white">
+              <div class="inline-flex items-center text-sm font-semibold text-gray-900 dark:text-white">
                  ${element.date}
                 </div>
             </div>
         </li>`
     }
     let Html = `
-    <ul class="mt-16 m-auto divide-y divide-gray-200 dark:divide-gray-700">
+    <ul class="mt-4 m-auto divide-y divide-gray-200 dark:divide-gray-700">
         ${lists}
     </ul>
     `
