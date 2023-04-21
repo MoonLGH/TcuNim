@@ -43,12 +43,7 @@ async function loadData(data){
     try {
         for (let i = 0; i < data.video.length; i++) {
             let video = data.video[i]
-            if(video.url.toLowerCase().includes("zippy")){
-                let link = await parseZippy(video.url)
-                videoList.push({url:link,quality:video.quality})
-            } else {
-                videoList.push({url:video.url,quality:video.quality,iframe:video.iframe})
-            }
+            videoList.push({url:video.url,quality:video.quality,iframe:video.iframe ? video.iframe : false})
         }
     } catch (err) {
         document.querySelector("#topCard").innerHTML += `
@@ -82,19 +77,6 @@ async function loadData(data){
     }
 }
 
-async function parseZippy(url) {
-    let res = (await (await fetch(url)).text())
-    // const $ = load(res.data);
-    let link = url.substring(0, url.indexOf("/d/"));
-    let id = url.split("/d/")[1].split("/")[0];
-    console.log(url)
-    const num = parseInt(res.match(/.omg = (\d+)%78956/)[1]) % 78956;
-    const lastStr = res.match(/\+"(.+?)"/);
-    link += "/d/"+ id + "/" + (num+18) + lastStr[1];
-    console.log(link);
-    // console.log(link);
-    return link;
-  }
   
 function loadVideo(data){
     // loop data
