@@ -47,7 +47,7 @@ async function loadData(data){
                 let link = await parseZippy(video.url)
                 videoList.push({url:link,quality:video.quality})
             } else {
-                videoList.push({url:video.url,quality:video.quality})
+                videoList.push({url:video.url,quality:video.quality,iframe:video.iframe})
             }
         }
     } catch (err) {
@@ -110,5 +110,13 @@ function selectVideo(selector){
     console.log(selector)
     let video = videoList.find((el) => el.quality === selector)
     console.log(video)
-    document.querySelector("#watchUrl").setAttribute("src",video.url)
+    if (video.iframe){
+        document.querySelector("#watchUrl").classList.add("hidden")
+        document.querySelector("#watchUrliframe").classList.remove("hidden")
+        document.querySelector("#watchUrliframe").setAttribute("src",video.url)
+    } else {
+        document.querySelector("#watchUrl").classList.remove("hidden")
+        document.querySelector("#watchUrliframe").classList.add("hidden")
+        document.querySelector("#watchUrl").setAttribute("src",video.url)
+    }
 }
