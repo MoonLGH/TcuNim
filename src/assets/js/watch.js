@@ -40,6 +40,7 @@ async function menu() {
 
 async function loadData(data){
     document.querySelector("#title").innerText = data.title
+    document.querySelector("title").innerText = `TcuNim(${provider}) - ${data.title}`
     try {
         for (let i = 0; i < data.video.length; i++) {
             let video = data.video[i]
